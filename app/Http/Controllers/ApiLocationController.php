@@ -4,10 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Location;
 use Illuminate\Http\Request;
+use Validator;
 
 class ApiLocationController extends Controller
 {
- 
+    public function sendError($status,$message,$validationErrors)
+    {
+        return response()->json([
+            "status" => $status,
+            "message" => $message,
+            "validation errors" => $validationErrors
+        ]);
+    }
     public function index()
     {
         $locations = Location::all();
@@ -31,10 +39,11 @@ class ApiLocationController extends Controller
             'loc_type' => 'required',
             'zone_id' => 'required',
             'post_code' => 'required',
+            'address' => 'required',
             'extra_charges' => 'required'
         ]);
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError(201,'Saving location denied.', $validator->errors());
         }
         $location = Location::create($input);
         return response()->json([
@@ -72,7 +81,8 @@ class ApiLocationController extends Controller
             'loc_type' => 'required',
             'zone_id' => 'required',
             'post_code' => 'required',
-            'extra_charges' => 'required'
+            'extra_charges' => 'required',
+            'address'=>'required'
         ]);
         
         if($validator->fails()){
@@ -92,13 +102,13 @@ class ApiLocationController extends Controller
         ]);
     }
 
-    public function destroy(Location $location)
+    public function destroy( $id)
     {
         $location = Location::find($id); 
         $location->delete();
         return response()->json([
             "success" => true,
-            "message" => "$location deleted successfully.",
+            "message" => "location deleted successfully.",
             "data" => $location
         ]);
     }

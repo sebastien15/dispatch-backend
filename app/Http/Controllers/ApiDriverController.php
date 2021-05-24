@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
 
 class ApiDriverController extends Controller
 {
-    
+    public function sendError($status,$message)
+    {
+        return response()->json([
+            "status" => $status,
+            "message" => $message
+        ]);
+    }
     public function index()
     {
         $drivers = Driver::all();

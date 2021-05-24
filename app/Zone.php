@@ -13,7 +13,3 @@ class Zone extends Model
         'zone_name'
     ];
 }
-
-// namespace App\Models;
-// use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Database\Eloquent\Model;

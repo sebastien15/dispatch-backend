@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostCodesTable extends Migration
+class CreatePaymentGatewaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreatePostCodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_codes', function (Blueprint $table) {
+        Schema::create('payment_gateways', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('post_code');
-            $table->unsignedBigInteger('zone_id');
+            $table->string('gateway');
+            $table->string('merchant_id');
+            $table->string('password');
+            $table->string('gateway_id');
             $table->timestamps();
-
-            $table->foreign('zone_id')->references('id')->on('zones');
-        
         });
     }
 
@@ -31,6 +30,6 @@ class CreatePostCodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_codess');
+        Schema::dropIfExists('payment_gateways');
     }
 }

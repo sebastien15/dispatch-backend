@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Driver_availability;
 use Illuminate\Http\Request;
+use Validator;
 
 class ApiDriver_availabilityController extends Controller
 {
-
+    public function sendError($status,$message)
+    {
+        return response()->json([
+            "status" => $status,
+            "message" => $message
+        ]);
+    }
     public function index()
     {
         $driver_availability = Driver_availability::all();

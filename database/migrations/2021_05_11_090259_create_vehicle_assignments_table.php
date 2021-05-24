@@ -16,7 +16,7 @@ class CreateVehicleAssignmentsTable extends Migration
         Schema::create('vehicle_assignments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->dateTime('assigned_on');
-            $table->dateTime('end_one');
+            $table->dateTime('end_on')->nullable();
             // make the below lign a foreign key to vehicle type after creating vehicle type table
             $table->string('vehicle_type');
             $table->string('color');

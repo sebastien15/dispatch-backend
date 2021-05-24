@@ -4,10 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Vehicle_assignment;
 use Illuminate\Http\Request;
+use Validator;
 
 class ApiVehicle_assignmentController extends Controller
 {
-
+    public function sendError($status,$message,$validationErrors)
+    {
+        return response()->json([
+            "status" => $status,
+            "message" => $message,
+            "validation errors" => $validationErrors
+        ]);
+    }
     public function index()
     {
         $vehicle_assignments = Vehicle_assignment::all();
@@ -31,12 +39,14 @@ class ApiVehicle_assignmentController extends Controller
             'vehicle_type' => 'required',
             'color' => 'required',
             'vehicle_make' => 'required',
+            'assigned_on'=> 'required',
             'vehicle_no' => 'required',
             'vehicle_owner' => 'required',
             'vehicle_model' => 'required'
         ]);
+
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError(201,"saving vehicle assignment denied", $validator->errors());
         }
         $vehicle_assignment = Vehicle_assignment::create($input);
         return response()->json([
@@ -66,23 +76,29 @@ class ApiVehicle_assignmentController extends Controller
         //
     }
 
-    public function update(Request $request, Vehicle_assignment $vehicle_assignment)
+    public function update(Request $request, $id)
     {
         $input = $request->all();
         $vehicle_assignment = Vehicle_assignment::find($id);
         $validator = Validator::make($input, [
-            'vehicle_type'  => 'required',
-            'color'         => 'required',
-            'vehicle_make'  => 'required',
-            'vehicle_no'    => 'required',
+            'vehicle_type' => 'required',
+            'color' => 'required',
+            'vehicle_make' => 'required',
+            'assigned_on'=> 'required',
+            'vehicle_no' => 'required',
             'vehicle_owner' => 'required',
             'vehicle_model' => 'required'
         ]);
         
+        if(is_null($vehicle_assignment)){
+            return $this->sendError(404,'Vehicle assignment not found .', $validator->errors());       
+        }
         if($validator->fails()){
-        return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError(201,'Update Vehicle assignment not found .', $validator->errors());       
         }
         
+        $vehicle_assignment->assigned_on   = $input['assigned_on'];
+        $vehicle_assignment->end_on        = $input['end_on'];
         $vehicle_assignment->vehicle_type  = $input['vehicle_type'];
         $vehicle_assignment->color         = $input['color'];
         $vehicle_assignment->vehicle_make  = $input['vehicle_make'];
@@ -98,9 +114,12 @@ class ApiVehicle_assignmentController extends Controller
         ]);
     }
 
-    public function destroy(Vehicle_assignment $vehicle_assignment)
+    public function destroy($id)
     {
         $vehicle_assignment = Vehicle_assignment::find($id); 
+        if(is_null($vehicle_assignment)){
+            return $this->sendError(404,'Vehicle assignment not found .', $validator->errors());       
+        }
         $vehicle_assignment->delete();
         return response()->json([
             "success" => true,

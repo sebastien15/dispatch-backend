@@ -4,10 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Post_code;
 use Illuminate\Http\Request;
+use Validator;
 
 class ApiPost_codeController extends Controller
 {
-
+    public function sendError($status,$message,$validationErrors)
+    {
+        return response()->json([
+            "status" => $status,
+            "message" => $message,
+            "validation errors" => $validationErrors
+        ]);
+    }
     public function index()
     {
         $post_codes = Post_code::all();
@@ -18,11 +26,6 @@ class ApiPost_codeController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $input = $request->all();
@@ -31,7 +34,7 @@ class ApiPost_codeController extends Controller
             'zone_id' => 'required'
         ]);
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError(201,'Failed to save post code.', $validator->errors());
         }
         $post_code = Post_code::create($input);
         return response()->json([
@@ -41,12 +44,12 @@ class ApiPost_codeController extends Controller
         ]);
     }
 
-    public function show( $id)
+    public function show($id)
     {
         $post_code = Post_code::find($id);
         
         if (is_null($post_code)) {
-        return $this->sendError('post_code not found.');
+        return $this->sendError(404, "post_code not found.","");
         };
         return response()->json([
             "success" => true,
@@ -55,10 +58,6 @@ class ApiPost_codeController extends Controller
         ]);
     }
 
-    public function edit(Post_code $post_code)
-    {
-        //
-    }
 
     public function update(Request $request, $id)
     {
@@ -68,9 +67,11 @@ class ApiPost_codeController extends Controller
             'post_code' => 'required',
             'zone_id' => 'required'
         ]);
-        
+        if (is_null($post_code)) {
+            return $this->sendError(404,'Post code not found.',"");
+        };
         if($validator->fails()){
-        return $this->sendError('Validation Error.', $validator->errors());       
+            return $this->sendError(201,'Failed to save post code.', $validator->errors());
         }
         
         $post_code->post_code = $input['post_code'];

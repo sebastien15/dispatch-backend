@@ -9,6 +9,11 @@ use App\Http\Controllers\ApiZoneController;
 use App\Http\Controllers\ApiLocationController;
 use App\Http\Controllers\ApiVehicle_assignmentController;
 use App\Http\Controllers\ApiPost_codeController;
+use App\Http\Controllers\ApiCustomerController;
+use App\Http\Controllers\ApiVehicleTypeController;
+use App\Http\Controllers\ApiPolicyController;
+use App\Http\Controllers\ApiPaymentGatewayController;
+use App\Http\Controllers\ApiPaymentGateway;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -105,6 +110,61 @@ Route::group(
         Route::get('post_code/{id}', 'ApiPost_codeController@show');
         Route::put('post_code/{id}', 'ApiPost_codeController@update');
         Route::delete('post_code/{id}', 'ApiPost_codeController@destroy');
+ });
+Route::group(
+    [
+      'middleware'=>'api'
+    ]
+    , function () {
+        Route::get('customer', 'ApiCustomerController@index');
+        Route::post('customer', 'ApiCustomerController@store');
+        Route::get('customer/{id}', 'ApiCustomerController@show');
+        Route::put('customer/{id}', 'ApiCustomerController@update');
+        Route::delete('customer/{id}', 'ApiCustomerController@destroy');
+ });
+Route::group(
+    [
+      'middleware'=>'api'
+    ]
+    , function () {
+        Route::get('vehicle_type', 'ApiVehicleTypeController@index');
+        Route::post('vehicle_type', 'ApiVehicleTypeController@store');
+        Route::get('vehicle_type/{id}', 'ApiVehicleTypeController@show');
+        Route::put('vehicle_type/{id}', 'ApiVehicleTypeController@update');
+        Route::delete('vehicle_type/{id}', 'ApiVehicleTypeController@destroy');
+ });
+Route::group(
+    [
+      'middleware'=>'api'
+    ]
+    , function () {
+        Route::get('policy', 'ApiPolicyController@index');
+        Route::post('policy', 'ApiPolicyController@store');
+        Route::get('policy/{id}', 'ApiPolicyController@show');
+        Route::put('policy/{id}', 'ApiPolicyController@update');
+        Route::delete('policy/{id}', 'ApiPolicyController@destroy');
+ });
+Route::group(
+    [
+      'middleware'=>'api'
+    ]
+    , function () {
+        Route::get('gateway', 'ApiPaymentGatewayController@index');
+        Route::post('gateway', 'ApiPaymentGatewayController@store');
+        Route::get('gateway/{id}', 'ApiPaymentGatewayController@show');
+        Route::put('gateway/{id}', 'ApiPaymentGatewayController@update');
+        Route::delete('gateway/{id}', 'ApiPaymentGatewayController@destroy');
+ });
+Route::group(
+    [
+      'middleware'=>'api'
+    ]
+    , function () {
+        Route::get('gateway', 'ApiCompanyInfoController@index');
+        Route::post('gateway', 'ApiCompanyInfoController@store');
+        Route::get('gateway/{id}', 'ApiCompanyInfoController@show');
+        Route::put('gateway/{id}', 'ApiCompanyInfoController@update');
+        Route::delete('gateway/{id}', 'ApiCompanyInfoController@destroy');
  });
 
 
