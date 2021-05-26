@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Policy extends Model
 {
-    protected $fillable= [
+    protected $fillable = [
         'driver_expiry_date','booking_expiry_date',
         'airport_booking_expiry_date','airport_pickup_charges',
         'driver_commission_per_booking','driver_monthly_rent',

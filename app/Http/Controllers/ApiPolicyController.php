@@ -38,7 +38,6 @@ class ApiPolicyController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        dd($request->all());
         $Policy = Policy::create($input);
         return response()->json([
             "success" => true,
@@ -79,7 +78,6 @@ class ApiPolicyController extends Controller
         if (is_null($Policy)) {
             return $this->sendError(404,'Policy not found.',"");
         };
-        dd($input);
         
         $Policy->driver_expiry_date             = $input['driver_expiry_date'];
         $Policy->booking_expiry_date            = $input['booking_expiry_date'];

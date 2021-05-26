@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Driver;
 use Illuminate\Http\Request;
+use Validator;
 
 class ApiDriverController extends Controller
 {
@@ -80,10 +81,10 @@ class ApiDriverController extends Controller
         //
     }
 
-    public function update(Request $request, Driver $driver)
+    public function update(Request $request, $id)
     {
         $input = $request->all();
-        $zone = Driver::find($id);
+        $driver = Driver::find($id);
         $validator = Validator::make($input, [
             'driver_no' => 'required',
             'pda_pass' => 'required',
@@ -106,6 +107,7 @@ class ApiDriverController extends Controller
         if($validator->fails()){
         return $this->sendError('Validation Error.', $validator->errors());       
         }
+        
         
         $driver->driver_no = $input['driver_no'];
         $driver->pda_pass = $input['pda_pass'];
@@ -132,7 +134,7 @@ class ApiDriverController extends Controller
         ]);
     }
 
-    public function destroy(Driver $driver)
+    public function destroy( $id)
     {
         $driver = Driver::find($id); 
         $driver->delete();

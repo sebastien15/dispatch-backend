@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use validator;
 use App\Payment_gateway;
+use Illuminate\Http\Request;
+use Validator;
 
 class ApiPaymentGatewayController extends Controller
 {
@@ -38,7 +38,10 @@ class ApiPaymentGatewayController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input,[
-            'paymentGateway_name' => 'required'
+            'gateway' => 'required',
+            'merchant_id' => 'required',
+            'password' => 'required',
+            'gateway_id' => 'required'
         ]);
         if($validator->fails()){
             return $this->sendError(201,"saving paymentGateway denied", $validator->errors());
@@ -80,7 +83,10 @@ class ApiPaymentGatewayController extends Controller
         $input = $request->all();
         $paymentGateway = Payment_gateway::find($id);
         $validator = Validator::make($input, [
-            'paymentGateway_name' => 'required'
+            'gateway' => 'required',
+            'merchant_id' => 'required',
+            'password' => 'required',
+            'gateway_id' => 'required'
         ]);
 
         if (is_null($paymentGateway)) {
@@ -90,7 +96,10 @@ class ApiPaymentGatewayController extends Controller
         return $this->sendError(201,"update paymentGateway denied", $validator->errors());       
         }
         
-        $paymentGateway->paymentGateway_name = $input['paymentGateway_name'];
+        $paymentGateway->gateway = $input['gateway'];
+        $paymentGateway->merchant_id = $input['merchant_id'];
+        $paymentGateway->password = $input['password'];
+        $paymentGateway->gateway_id = $input['gateway_id'];
         $paymentGateway->save();
         
         return response()->json([
@@ -104,6 +113,9 @@ class ApiPaymentGatewayController extends Controller
     public function destroy($id)
     {
         $paymentGateway = Payment_gateway::find($id); 
+        if (empty($paymentGateway)) {
+            return $this->sendError(404," paymentGateway with $id not found",[]);
+        }
         $paymentGateway->delete();
         return response()->json([
             "success" => true,

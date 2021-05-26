@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\ApiDriverController;
@@ -160,11 +159,11 @@ Route::group(
       'middleware'=>'api'
     ]
     , function () {
-        Route::get('gateway', 'ApiCompanyInfoController@index');
-        Route::post('gateway', 'ApiCompanyInfoController@store');
-        Route::get('gateway/{id}', 'ApiCompanyInfoController@show');
-        Route::put('gateway/{id}', 'ApiCompanyInfoController@update');
-        Route::delete('gateway/{id}', 'ApiCompanyInfoController@destroy');
+        Route::get('company_info', 'ApiCompanyInfoController@index');
+        Route::post('company_info', 'ApiCompanyInfoController@store');
+        Route::get('company_info/{id}', 'ApiCompanyInfoController@show');
+        Route::put('company_info/{id}', 'ApiCompanyInfoController@update');
+        Route::delete('company_info/{id}', 'ApiCompanyInfoController@destroy');
  });
 
 
